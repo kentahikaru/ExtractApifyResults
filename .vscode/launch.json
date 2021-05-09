@@ -16,7 +16,6 @@
       "stopAtEntry": false,
       "env": {
         "ASPNETCORE_ENVIRONMENT": "Development",
-        "Costify_TestVar": "TestValue",
       },
     },
     {
