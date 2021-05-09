@@ -1,12 +1,22 @@
-﻿using System;
+﻿using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 
 namespace ExtractApifyResults
 {
     class Program
     {
-        static void Main(string[] args)
+        static async Task Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            await Host.CreateDefaultBuilder(args)
+            .ConfigureLogging(logging => {
+
+            })
+            .ConfigureServices((hostContext, services) => {
+                services.AddHostedService<ConsoleHostedService>();
+            })
+            .RunConsoleAsync();
         }
     }
 }
