@@ -1,11 +1,12 @@
 ﻿using System;
+using System.IO;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Configuration.Json;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using NLog;
-using NLog.Extensions.Logging;
+using Serilog;
 
 namespace ExtractApifyResults
 {
@@ -13,23 +14,31 @@ namespace ExtractApifyResults
     {
         static async Task Main(string[] args)
         {
-            var config = new ConfigurationBuilder().Build();
-            var logger = LogManager.Setup()
-                                   .SetupExtensions(ext => ext.RegisterConfigSettings(config))
-                                   .GetCurrentClassLogger();
+            var config = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+                .AddEnvironmentVariables()
+                .Build();
+
+            Log.Logger = new LoggerConfiguration()
+                .ReadFrom.Configuration(config)
+                .CreateLogger();
+
+            var logger = Log.Logger;
 
             try
             {
                 logger.Debug("Application Starting Up");
 
                 await Host.CreateDefaultBuilder(args)
+                    .UseSerilog()
                     .ConfigureServices((hostContext, services) => {
                         services.AddHostedService<ConsoleHostedService>();
                         services.AddOptions<ExtractApifyResultsConfiguration>().Bind(hostContext.Configuration.GetSection("ExtractApifyResults"));
                     })
                     .ConfigureLogging(logging => {
                         logging.ClearProviders();
-                        logging.AddNLog(config);
+
                     })
                     .RunConsoleAsync();
             }
@@ -42,7 +51,7 @@ namespace ExtractApifyResults
             finally
             {
                 // Ensure to flush and stop internal timers/threads before application-exit (Avoid segmentation fault on Linux)
-                LogManager.Shutdown();
+
             }
         }
     }
