@@ -36,6 +36,7 @@ public Task StartAsync(CancellationToken cancellationToken)
             {
                 try
                 {
+                    throw new Exception("test");
                     _logger.LogInformation("Hello World!");
                     var test = _configuration.Value.premenna;
                     _logger.LogInformation(test);
@@ -44,7 +45,10 @@ public Task StartAsync(CancellationToken cancellationToken)
                 }
                 catch (Exception ex)
                 {
+                    
                     _logger.LogError(ex, "Unhandled exception!");
+                    _logger.LogError(ex.Message + Environment.NewLine + ex.StackTrace);
+                    
                 }
                 finally
                 {
