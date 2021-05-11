@@ -11,6 +11,6 @@ namespace ExtractApifyResults
 {
     public class ExtractApifyResultsConfiguration
     {
-        public string premenna {get;set;}
+        public List<string> Tasks {get;set;}
     }
 }

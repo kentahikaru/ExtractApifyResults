@@ -17,6 +17,7 @@ namespace ExtractApifyResults
             var config = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+                .AddJsonFile("appsettings.secrets.json", optional: true, reloadOnChange: true)
                 .AddEnvironmentVariables()
                 .Build();
 
@@ -32,9 +33,16 @@ namespace ExtractApifyResults
 
                 await Host.CreateDefaultBuilder(args)
                     .UseSerilog()
+                    .ConfigureAppConfiguration((hostingContext, config) =>
+                    {
+                        config.AddJsonFile("appsettings.secrets.json", optional: true, reloadOnChange: true);
+                        config.AddEnvironmentVariables();
+                    })
                     .ConfigureServices((hostContext, services) => {
                         services.AddHostedService<ConsoleHostedService>();
                         services.AddOptions<ExtractApifyResultsConfiguration>().Bind(hostContext.Configuration.GetSection("ExtractApifyResults"));
+                        services.AddOptions<SecretsEmailConfiguration>().Bind(hostContext.Configuration.GetSection("Email"));
+                        services.AddOptions<SecretsAppSettingsConfiguration>().Bind(hostContext.Configuration.GetSection("AppSettings"));
                     })
                     .ConfigureLogging(logging => {
                         logging.ClearProviders();
