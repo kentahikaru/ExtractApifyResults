@@ -7,33 +7,37 @@ using Microsoft.Extensions.Configuration.EnvironmentVariables;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using ExtractApifyResults.Interfaces;
 
-namespace ExtractApifyResults
+namespace ExtractApifyResults.Services
 {
   public class ConsoleHostedService : IHostedService
   {
     private readonly ILogger _logger;
     private readonly IHostApplicationLifetime _appLifetime;
-    private readonly IOptions<ExtractApifyResultsConfiguration> _configuration;
-     IOptions<SecretsAppSettingsConfiguration> _appSettingsSecretsl;
-    IOptions<SecretsEmailConfiguration> _emailSecrets;
-    IConfiguration _config;
+    private readonly IOptions<ExtractApifyResultsConfiguration> _earConfig;
+    private readonly IOptions<SecretsAppSettingsConfiguration> _appSettingsSecretsl;
+    private readonly IOptions<SecretsEmailConfiguration> _emailSecrets;
+    private readonly IConfiguration _config;
+    private readonly IAskApifyApi _askApifyapi;
 
     public ConsoleHostedService(
         ILogger<ConsoleHostedService> logger,
         IHostApplicationLifetime appLifetime,
-        IOptions<ExtractApifyResultsConfiguration> configuration,
+        IOptions<ExtractApifyResultsConfiguration> earConfig,
         IOptions<SecretsAppSettingsConfiguration> appSettingsSecrets,
         IOptions<SecretsEmailConfiguration> emailSecrets,
-        IConfiguration config
+        IConfiguration config,
+        IAskApifyApi askApifyApi
         )
     {
         _logger = logger;
         _appLifetime = appLifetime;
-        _configuration = configuration;
+        _earConfig = earConfig;
         _appSettingsSecretsl = appSettingsSecrets;
         _emailSecrets = emailSecrets;
         _config = config;
+        _askApifyapi = askApifyApi;
     }
 
 public Task StartAsync(CancellationToken cancellationToken)
@@ -46,17 +50,20 @@ public Task StartAsync(CancellationToken cancellationToken)
             {
                 try
                 {
-                    _logger.LogInformation("Hello World!");
-                    var test = _configuration.Value.Tasks;
-                    _logger.LogInformation(test.Count.ToString());
-                    // Simulate real work is being done
-                    await Task.Delay(1000);
+                    foreach(string task in _earConfig.Value.Tasks)
+                    {
+                        var lastTask = await _askApifyapi.GetLastRunningTask(task);
+                        //var result = AskApifyApi.GetResults(lastTask.defaultKeyValueStoreId, "format");
+                    }
+
+                    // EmailService.SendEmail(ListPriloh);
+
+
+
                 }
                 catch (Exception ex)
                 {
-                    
                     _logger.LogError(ex, "Unhandled exception!");
-                    
                 }
                 finally
                 {

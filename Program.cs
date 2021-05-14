@@ -7,6 +7,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Serilog;
+using ExtractApifyResults.Interfaces;
+using ExtractApifyResults.Services;
 
 namespace ExtractApifyResults
 {
@@ -43,6 +45,8 @@ namespace ExtractApifyResults
                         services.AddOptions<ExtractApifyResultsConfiguration>().Bind(hostContext.Configuration.GetSection("ExtractApifyResults"));
                         services.AddOptions<SecretsEmailConfiguration>().Bind(hostContext.Configuration.GetSection("Email"));
                         services.AddOptions<SecretsAppSettingsConfiguration>().Bind(hostContext.Configuration.GetSection("AppSettings"));
+                        services.AddTransient<ITransport, Transport>();
+                        services.AddTransient<IAskApifyApi, AskApifyApi>();
                     })
                     .ConfigureLogging(logging => {
                         logging.ClearProviders();
