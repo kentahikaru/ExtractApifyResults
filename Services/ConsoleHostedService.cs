@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
@@ -48,12 +49,15 @@ public Task StartAsync(CancellationToken cancellationToken)
         {
             Task.Run(async () =>
             {
+                List<MemoryStream> streamsList = new List<MemoryStream>();
                 try
                 {
                     foreach(string task in _earConfig.Value.Tasks)
                     {
                         var lastTask = await _askApifyapi.GetLastRunningTask(task);
                         //var result = AskApifyApi.GetResults(lastTask.defaultKeyValueStoreId, "format");
+                        streamsList.Add(await _askApifyapi.GetTaskResult(task, "html"));
+                        streamsList.Add(await _askApifyapi.GetTaskResult(task, "xlsx"));
                     }
 
                     // EmailService.SendEmail(ListPriloh);

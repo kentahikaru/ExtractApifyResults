@@ -1,3 +1,4 @@
+using System.Text;
 using System.IO;
 using System.Threading.Tasks;
 using System.Text.Json;
@@ -31,7 +32,14 @@ namespace ExtractApifyResults.Services
             string data =  await _transport.GetDataString(url);
             LastTaskRunContract lastTask = JsonSerializer.Deserialize<LastTaskRunContract>(data);
             return lastTask;
+        }
 
+        public async Task<MemoryStream> GetTaskResult(string task, string format)
+        {
+            string url = baseAddress + $"v2/actor-tasks/{task}/runs/last/dataset/items?token={_appSettingsSecrets.Value.Token}&status=SUCCEEDED&format={format}";
+            MemoryStream memStream =  await _transport.GetDataStream(url);
+            // string test = Encoding.ASCII.GetString(memStream.ToArray());
+            return memStream;
         }
     }
 }
