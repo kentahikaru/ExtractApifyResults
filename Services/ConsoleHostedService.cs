@@ -4,11 +4,11 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Configuration.EnvironmentVariables;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using ExtractApifyResults.Interfaces;
+using ExtractApifyResults.Contracts;
 
 namespace ExtractApifyResults.Services
 {
@@ -52,17 +52,17 @@ public Task StartAsync(CancellationToken cancellationToken)
         {
             Task.Run(async () =>
             {
-                List<MemoryStream> streamsList = new List<MemoryStream>();
+                List<ApifyTaskResult> tasksList = new List<ApifyTaskResult>();
                 try
                 {
                     foreach(string task in _earConfig.Value.Tasks)
                     {
                         var lastTask = await _askApifyapi.GetLastRunningTask(task);
-                        streamsList.Add(await _askApifyapi.GetTaskResult(task, "html"));
-                        streamsList.Add(await _askApifyapi.GetTaskResult(task, "xlsx"));
+                        tasksList.Add(await _askApifyapi.GetApifyTaskResult(task, MimeTypeEnum.html));
+                        tasksList.Add(await _askApifyapi.GetApifyTaskResult(task, MimeTypeEnum.xlsx));
                     }
 
-                    _email.Send(streamsList);
+                    await _email.Send(tasksList);
 
 
                 }
@@ -72,7 +72,6 @@ public Task StartAsync(CancellationToken cancellationToken)
                 }
                 finally
                 {
-                    // Stop the application once the work is done
                     _appLifetime.StopApplication();
                 }
             });

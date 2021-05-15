@@ -1,7 +1,7 @@
 using System;
 using System.Text.Json.Serialization;
 
-namespace ExtractApifyResults.Contracts
+namespace ExtractApifyResults.Contracts.LastTaskRunContract
 {
     public class LastTaskRunContract
     {
@@ -138,6 +138,4 @@ namespace ExtractApifyResults.Contracts
         [JsonPropertyName("containerUrl")]
         public string ContainerUrl { get; set; }
     }
-
-  
 }
