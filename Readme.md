@@ -1,0 +1,1 @@
+[![CI](https://github.com/kentahikaru/ExtractApifyResults/actions/workflows/ci.yaml/badge.svg)](https://github.com/kentahikaru/ExtractApifyResults/actions/workflows/ci.yaml)
