@@ -14,11 +14,11 @@ namespace ExtractApifyResults.Services
         private readonly string baseAddress = "https://api.apify.com/";
 
         private readonly IOptions<ExtractApifyResultsConfiguration> _earConfig;
-        private readonly IOptions<SecretsAppSettingsConfiguration> _appSettingsSecrets;
+        private readonly IOptions<AppSettingsSecretsConfiguration> _appSettingsSecrets;
         private readonly IConfiguration _config;
         private readonly ITransport _transport;
         public AskApifyApi(IConfiguration config,  IOptions<ExtractApifyResultsConfiguration> earConfig,
-            IOptions<SecretsAppSettingsConfiguration> appSettingsSecrets, ITransport transport)
+            IOptions<AppSettingsSecretsConfiguration> appSettingsSecrets, ITransport transport)
         {
             _config = config;
             _earConfig = earConfig;

@@ -43,8 +43,8 @@ namespace ExtractApifyResults
                     .ConfigureServices((hostContext, services) => {
                         services.AddHostedService<ConsoleHostedService>();
                         services.AddOptions<ExtractApifyResultsConfiguration>().Bind(hostContext.Configuration.GetSection("ExtractApifyResults"));
-                        services.AddOptions<SecretsEmailConfiguration>().Bind(hostContext.Configuration.GetSection("Email"));
-                        services.AddOptions<SecretsAppSettingsConfiguration>().Bind(hostContext.Configuration.GetSection("AppSettings"));
+                        services.AddOptions<EmailSecretsConfiguration>().Bind(hostContext.Configuration.GetSection("Email"));
+                        services.AddOptions<AppSettingsSecretsConfiguration>().Bind(hostContext.Configuration.GetSection("AppSettings"));
                         services.AddTransient<ITransport, Transport>();
                         services.AddTransient<IAskApifyApi, AskApifyApi>();
                         services.AddTransient<IEmail,EMail>();

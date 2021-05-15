@@ -1,6 +1,6 @@
 namespace ExtractApifyResults
 {
-    public class SecretsEmailConfiguration
+    public class EmailSecretsConfiguration
     {
         public string SmtpServer {get;set;}
         public int Port {get;set;}

@@ -20,11 +20,11 @@ namespace ExtractApifyResults.Services
     {
         ILogger<EMail> _logger;
        private readonly IOptions<ExtractApifyResultsConfiguration> _earConfig;
-        private readonly IOptions<SecretsEmailConfiguration> _emailSecrets;
+        private readonly IOptions<EmailSecretsConfiguration> _emailSecrets;
         private readonly IConfiguration _config;
         private readonly ITransport _transport;
         public EMail(ILogger<EMail> logger, IConfiguration config,  IOptions<ExtractApifyResultsConfiguration> earConfig,
-            IOptions<SecretsEmailConfiguration> emailSecrets, ITransport transport)
+            IOptions<EmailSecretsConfiguration> emailSecrets, ITransport transport)
         {
             _logger = logger;
             _config = config;

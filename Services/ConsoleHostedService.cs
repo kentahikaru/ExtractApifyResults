@@ -17,8 +17,8 @@ namespace ExtractApifyResults.Services
     private readonly ILogger _logger;
     private readonly IHostApplicationLifetime _appLifetime;
     private readonly IOptions<ExtractApifyResultsConfiguration> _earConfig;
-    private readonly IOptions<SecretsAppSettingsConfiguration> _appSettingsSecretsl;
-    private readonly IOptions<SecretsEmailConfiguration> _emailSecrets;
+    private readonly IOptions<AppSettingsSecretsConfiguration> _appSettingsSecretsl;
+    private readonly IOptions<EmailSecretsConfiguration> _emailSecrets;
     private readonly IConfiguration _config;
     private readonly IAskApifyApi _askApifyapi;
     private readonly IEmail _email;
@@ -27,8 +27,8 @@ namespace ExtractApifyResults.Services
         ILogger<ConsoleHostedService> logger,
         IHostApplicationLifetime appLifetime,
         IOptions<ExtractApifyResultsConfiguration> earConfig,
-        IOptions<SecretsAppSettingsConfiguration> appSettingsSecrets,
-        IOptions<SecretsEmailConfiguration> emailSecrets,
+        IOptions<AppSettingsSecretsConfiguration> appSettingsSecrets,
+        IOptions<EmailSecretsConfiguration> emailSecrets,
         IConfiguration config,
         IAskApifyApi askApifyApi,
         IEmail email

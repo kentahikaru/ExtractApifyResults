@@ -1,6 +1,6 @@
 namespace ExtractApifyResults
 {
-    public class SecretsAppSettingsConfiguration
+    public class AppSettingsSecretsConfiguration
     {
         public string Token {get;set;}
     }
