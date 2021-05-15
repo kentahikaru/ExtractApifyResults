@@ -47,6 +47,7 @@ namespace ExtractApifyResults
                         services.AddOptions<SecretsAppSettingsConfiguration>().Bind(hostContext.Configuration.GetSection("AppSettings"));
                         services.AddTransient<ITransport, Transport>();
                         services.AddTransient<IAskApifyApi, AskApifyApi>();
+                        services.AddTransient<IEmail,EMail>();
                     })
                     .ConfigureLogging(logging => {
                         logging.ClearProviders();

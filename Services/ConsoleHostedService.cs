@@ -21,6 +21,7 @@ namespace ExtractApifyResults.Services
     private readonly IOptions<SecretsEmailConfiguration> _emailSecrets;
     private readonly IConfiguration _config;
     private readonly IAskApifyApi _askApifyapi;
+    private readonly IEmail _email;
 
     public ConsoleHostedService(
         ILogger<ConsoleHostedService> logger,
@@ -29,7 +30,8 @@ namespace ExtractApifyResults.Services
         IOptions<SecretsAppSettingsConfiguration> appSettingsSecrets,
         IOptions<SecretsEmailConfiguration> emailSecrets,
         IConfiguration config,
-        IAskApifyApi askApifyApi
+        IAskApifyApi askApifyApi,
+        IEmail email
         )
     {
         _logger = logger;
@@ -39,6 +41,7 @@ namespace ExtractApifyResults.Services
         _emailSecrets = emailSecrets;
         _config = config;
         _askApifyapi = askApifyApi;
+        _email = email;
     }
 
 public Task StartAsync(CancellationToken cancellationToken)
@@ -55,13 +58,11 @@ public Task StartAsync(CancellationToken cancellationToken)
                     foreach(string task in _earConfig.Value.Tasks)
                     {
                         var lastTask = await _askApifyapi.GetLastRunningTask(task);
-                        //var result = AskApifyApi.GetResults(lastTask.defaultKeyValueStoreId, "format");
                         streamsList.Add(await _askApifyapi.GetTaskResult(task, "html"));
                         streamsList.Add(await _askApifyapi.GetTaskResult(task, "xlsx"));
                     }
 
-                    // EmailService.SendEmail(ListPriloh);
-
+                    _email.Send(streamsList);
 
 
                 }
