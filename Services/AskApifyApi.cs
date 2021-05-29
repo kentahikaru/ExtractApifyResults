@@ -8,6 +8,7 @@ using ExtractApifyResults.Contracts;
 using ExtractApifyResults.Contracts.LastTaskRunContract;
 using ExtractApifyResults.Contracts.TaskObject;
 using ExtractApifyResults.Interfaces;
+using Serilog;
 
 namespace ExtractApifyResults.Services
 {
@@ -31,7 +32,9 @@ namespace ExtractApifyResults.Services
         public async Task<LastTaskRunContract> GetLastRunningTask(string task)
         {
             string url = baseAddress + $"v2/actor-tasks/{task}/runs/last?token={_appSettingsSecrets.Value.Token}";
+            Log.Debug($"Querying: {url}");
             string data =  await _transport.GetDataString(url);
+            Log.Debug($"Result: {data}");
             LastTaskRunContract lastTask = JsonSerializer.Deserialize<LastTaskRunContract>(data);
             return lastTask;
         }
@@ -51,6 +54,7 @@ namespace ExtractApifyResults.Services
         public async Task<MemoryStream> GetTaskResult(string task, MimeTypeEnum format)
         {
             string url = baseAddress + $"v2/actor-tasks/{task}/runs/last/dataset/items?token={_appSettingsSecrets.Value.Token}&status=SUCCEEDED&format={format}";
+            Log.Debug($"Querying: {url}");
             MemoryStream memStream =  await _transport.GetDataStream(url);
             // string test = Encoding.ASCII.GetString(memStream.ToArray());
             return memStream;
@@ -59,7 +63,9 @@ namespace ExtractApifyResults.Services
         public async Task<TaskObject> GetTaskObject(string task)
         {
             string url = baseAddress + $"v2/actor-tasks/{task}?token={_appSettingsSecrets.Value.Token}";
+            Log.Debug($"Querying: {url}");
             string data =  await _transport.GetDataString(url);
+            Log.Debug($"Result: {data}");
             TaskObject taskObject = JsonSerializer.Deserialize<TaskObject>(data);
             return taskObject;
         }

@@ -49,7 +49,7 @@ namespace ExtractApifyResults.Contracts.LastTaskRunContract
         public double CpuMaxUsage { get; set; }
 
         [JsonPropertyName("cpuCurrentUsage")]
-        public int CpuCurrentUsage { get; set; }
+        public double CpuCurrentUsage { get; set; }
 
         [JsonPropertyName("netRxBytes")]
         public int NetRxBytes { get; set; }
